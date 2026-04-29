@@ -1,17 +1,45 @@
-import { date, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import { integer, numeric, pgTable, serial, text } from 'drizzle-orm/pg-core'
 
-export const books = pgTable('books', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  title: text('title').notNull(),
-  author: text('author').notNull(),
-  isbn: text('isbn').unique(),
-  description: text('description'),
-  coverUrl: text('cover_url'),
-  genre: text('genre'),
-  publishedAt: date('published_at'),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+export const livros = pgTable('livros', {
+  codl: serial('codl').primaryKey(),
+  titulo: text('titulo').notNull(),
+  editora: text('editora'),
+  edicao: integer('edicao'),
+  anoPublicacao: integer('ano_publicacao'),
+  valor: numeric('valor', { precision: 10, scale: 2 }).notNull(),
+  imagemUrl: text('imagem_url'),
+  paginas: integer('paginas'),
 })
 
-export type BookSelect = typeof books.$inferSelect
-export type BookInsert = typeof books.$inferInsert
+export const autores = pgTable('autores', {
+  codAu: serial('cod_au').primaryKey(),
+  nome: text('nome').notNull(),
+})
+
+export const assuntos = pgTable('assuntos', {
+  codAs: serial('cod_as').primaryKey(),
+  descricao: text('descricao').notNull(),
+})
+
+export const livroAutor = pgTable('livro_autor', {
+  livroCodl: integer('livro_codl')
+    .notNull()
+    .references(() => livros.codl),
+  autorCodAu: integer('autor_cod_au')
+    .notNull()
+    .references(() => autores.codAu),
+})
+
+export const livroAssunto = pgTable('livro_assunto', {
+  livroCodl: integer('livro_codl')
+    .notNull()
+    .references(() => livros.codl),
+  assuntoCodAs: integer('assunto_cod_as')
+    .notNull()
+    .references(() => assuntos.codAs),
+})
+
+export type LivroSelect = typeof livros.$inferSelect
+export type LivroInsert = typeof livros.$inferInsert
+export type AutorSelect = typeof autores.$inferSelect
+export type AssuntoSelect = typeof assuntos.$inferSelect

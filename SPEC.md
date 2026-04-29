@@ -27,14 +27,14 @@ Browser  ──►  apps/web  (Next.js 16, Vercel Edge/SSR)
 
 ### 3.1 `apps/web` — Next.js
 
-| Item | Decisão |
-|------|---------|
-| Framework | Next.js 16.2 com App Router |
-| Linguagem | TypeScript strict |
-| Estilização | Tailwind CSS 4.2 (CSS-first config, sem `tailwind.config.js`) |
+| Item         | Decisão                                                                |
+| ------------ | ---------------------------------------------------------------------- |
+| Framework    | Next.js 16.2 com App Router                                            |
+| Linguagem    | TypeScript strict                                                      |
+| Estilização  | Tailwind CSS 4.2 (CSS-first config, sem `tailwind.config.js`)          |
 | Renderização | Server Components por padrão; Client Components apenas onde necessário |
-| Fetch | Native `fetch` com `cache` e `revalidate` do Next.js |
-| Roteamento | File-based via App Router (`app/`) |
+| Fetch        | Native `fetch` com `cache` e `revalidate` do Next.js                   |
+| Roteamento   | File-based via App Router (`app/`)                                     |
 
 **Estrutura de pastas:**
 
@@ -66,15 +66,15 @@ NEXT_PUBLIC_API_URL=http://localhost:3001
 
 ### 3.2 `apps/api` — Fastify
 
-| Item | Decisão |
-|------|---------|
-| Framework | Fastify 5.8 |
-| Linguagem | TypeScript strict |
-| ORM | Drizzle ORM 0.45 |
-| Banco | Neon PostgreSQL via `@neondatabase/serverless` |
-| Validação | Zod + `@fastify/type-provider-zod` |
-| CORS | `@fastify/cors` (configurado para o domínio do `web`) |
-| Deploy | Vercel Fluid Compute (zero-config, app exposta na raiz) |
+| Item      | Decisão                                                 |
+| --------- | ------------------------------------------------------- |
+| Framework | Fastify 5.8                                             |
+| Linguagem | TypeScript strict                                       |
+| ORM       | Drizzle ORM 0.45                                        |
+| Banco     | Neon PostgreSQL via `@neondatabase/serverless`          |
+| Validação | Zod + `@fastify/type-provider-zod`                      |
+| CORS      | `@fastify/cors` (configurado para o domínio do `web`)   |
+| Deploy    | Vercel Fluid Compute (zero-config, app exposta na raiz) |
 
 **Estrutura de pastas:**
 
@@ -129,19 +129,39 @@ packages/shared/
 
 ### Schema inicial
 
+Cinco tabelas: `livros`, `autores`, `assuntos` e as duas tabelas de junção `livro_autor` e `livro_assunto`.
+
 ```sql
--- books
-id          uuid PRIMARY KEY DEFAULT gen_random_uuid()
-title       text NOT NULL
-author      text NOT NULL
-isbn        text UNIQUE
-description text
-cover_url   text
-genre       text
-published_at date
-created_at  timestamptz NOT NULL DEFAULT now()
-updated_at  timestamptz NOT NULL DEFAULT now()
+-- livros
+codl           serial PRIMARY KEY
+titulo         text NOT NULL
+editora        text
+edicao         integer
+ano_publicacao integer
+valor          numeric(10, 2) NOT NULL
+imagem_url     text
+paginas        integer
+
+-- autores
+cod_au  serial PRIMARY KEY
+nome    text NOT NULL
+
+-- assuntos
+cod_as    serial PRIMARY KEY
+descricao text NOT NULL
+
+-- livro_autor  (N:N livros ↔ autores)
+livro_codl   integer NOT NULL REFERENCES livros(codl)
+autor_cod_au integer NOT NULL REFERENCES autores(cod_au)
+PRIMARY KEY (livro_codl, autor_cod_au)
+
+-- livro_assunto  (N:N livros ↔ assuntos)
+livro_codl    integer NOT NULL REFERENCES livros(codl)
+assunto_cod_as integer NOT NULL REFERENCES assuntos(cod_as)
+PRIMARY KEY (livro_codl, assunto_cod_as)
 ```
+
+> Schema em evolução — campos adicionais serão definidos nas próximas iterações.
 
 ### Migrations
 
@@ -159,23 +179,88 @@ pnpm --filter api db:studio     # Abre Drizzle Studio
 
 Base URL: `/api` (Vercel roteia automaticamente)
 
-| Método | Rota | Descrição |
-|--------|------|-----------|
-| GET | `/api/books` | Lista livros (com paginação e filtros) |
-| GET | `/api/books/:id` | Retorna um livro pelo ID |
-| POST | `/api/books` | Cria um novo livro |
-| PUT | `/api/books/:id` | Atualiza um livro |
-| DELETE | `/api/books/:id` | Remove um livro |
-| GET | `/api/health` | Health check |
+### Livros
 
-### Query params para `GET /api/books`
+| Método | Rota                | Descrição                                      |
+| ------ | ------------------- | ---------------------------------------------- |
+| GET    | `/api/livros`       | Lista livros com autores e assuntos (paginado) |
+| GET    | `/api/livros/:codl` | Retorna um livro pelo ID                       |
+| POST   | `/api/livros`       | Cria livro (com autores e assuntos)            |
+| PUT    | `/api/livros/:codl` | Atualiza livro                                 |
+| DELETE | `/api/livros/:codl` | Remove livro                                   |
 
-| Param | Tipo | Descrição |
-|-------|------|-----------|
-| `page` | number | Página (default: 1) |
-| `limit` | number | Itens por página (default: 20, max: 100) |
-| `q` | string | Busca por título ou autor |
-| `genre` | string | Filtro por gênero |
+### Autores
+
+| Método | Rota                  | Descrição        |
+| ------ | --------------------- | ---------------- |
+| GET    | `/api/autores`        | Lista autores    |
+| GET    | `/api/autores/:codAu` | Retorna um autor |
+| POST   | `/api/autores`        | Cria autor       |
+| PUT    | `/api/autores/:codAu` | Atualiza autor   |
+| DELETE | `/api/autores/:codAu` | Remove autor     |
+
+### Assuntos
+
+| Método | Rota                   | Descrição          |
+| ------ | ---------------------- | ------------------ |
+| GET    | `/api/assuntos`        | Lista assuntos     |
+| GET    | `/api/assuntos/:codAs` | Retorna um assunto |
+| POST   | `/api/assuntos`        | Cria assunto       |
+| PUT    | `/api/assuntos/:codAs` | Atualiza assunto   |
+| DELETE | `/api/assuntos/:codAs` | Remove assunto     |
+
+### Google Books (busca externa)
+
+| Método | Rota                       | Descrição                                                  |
+| ------ | -------------------------- | ---------------------------------------------------------- |
+| GET    | `/api/google-books/search` | Busca livros na API do Google Books para apoio ao cadastro |
+
+**Query params:**
+
+| Param        | Tipo   | Descrição                                       |
+| ------------ | ------ | ----------------------------------------------- |
+| `q`          | string | Título do livro (obrigatório)                   |
+| `autor`      | string | Nome do autor (opcional)                        |
+| `maxResults` | number | Quantidade de resultados (default: 10, max: 40) |
+
+**Resposta:**
+
+```json
+{
+  "total": 42,
+  "items": [
+    {
+      "googleId": "abc123",
+      "titulo": "Clean Code",
+      "autores": ["Robert C. Martin"],
+      "editora": "Prentice Hall",
+      "anoPublicacao": 2008,
+      "paginas": 431,
+      "imagemUrl": "https://books.google.com/...",
+      "assuntos": ["Computers / Programming"]
+    }
+  ]
+}
+```
+
+> A chave `GOOGLE_BOOKS_API_KEY` é opcional — sem ela a API funciona com limite de ~1000 req/dia.
+> O frontend usa esses dados para pré-preencher o formulário de cadastro de livro.
+
+### Health
+
+| Método | Rota          | Descrição    |
+| ------ | ------------- | ------------ |
+| GET    | `/api/health` | Health check |
+
+### Query params para `GET /api/livros`
+
+| Param          | Tipo   | Descrição                                |
+| -------------- | ------ | ---------------------------------------- |
+| `page`         | number | Página (default: 1)                      |
+| `limit`        | number | Itens por página (default: 20, max: 100) |
+| `q`            | string | Busca por título                         |
+| `autorCodAu`   | number | Filtra por autor                         |
+| `assuntoCodAs` | number | Filtra por assunto                       |
 
 ---
 
@@ -198,8 +283,8 @@ Base URL: `/api` (Vercel roteia automaticamente)
 
 ```yaml
 packages:
-  - "apps/*"
-  - "packages/*"
+  - 'apps/*'
+  - 'packages/*'
 ```
 
 ---
@@ -219,25 +304,36 @@ packages/tsconfig/
 
 ## 9. Variáveis de Ambiente na Vercel
 
-Configurar no dashboard da Vercel para cada projeto (`web` e `api`):
+URLs de produção:
+
+- **web** → `https://book-catalog.faustoalves.com.br`
+- **api** → `https://api-book-catalog.faustoalves.com.br`
+
+Configurar no dashboard da Vercel para cada projeto:
 
 **api:**
-- `DATABASE_URL` — connection string do Neon
-- `CORS_ORIGIN` — URL de produção do `web`
+| Variável | Valor |
+|----------|-------|
+| `DATABASE_URL` | connection string pooled do Neon |
+| `DATABASE_URL_UNPOOLED` | connection string direct do Neon (usado pelo drizzle-kit em CI) |
+| `CORS_ORIGIN` | `https://book-catalog.faustoalves.com.br` |
+| `GOOGLE_BOOKS_API_KEY` | chave da Google Books API |
 
 **web:**
-- `NEXT_PUBLIC_API_URL` — URL de produção da `api`
+| Variável | Valor |
+|----------|-------|
+| `NEXT_PUBLIC_API_URL` | `https://api-book-catalog.faustoalves.com.br` |
 
 ---
 
 ## 10. Decisões e Justificativas
 
-| Decisão | Justificativa |
-|---------|---------------|
-| Turborepo | Criado pela Vercel, integração nativa, cache de build distribuído |
-| pnpm workspaces | Performance superior ao npm/yarn em monorepos |
-| Fastify + Vercel Fluid Compute | Zero-config desde Out/2025; concorrência nativa sem cold-start problemático |
-| Neon serverless driver | Driver WebSocket necessário em ambientes serverless (sem TCP persistente) |
-| Drizzle ORM | Type-safe, sem runtime overhead, migrations versionadas com drizzle-kit |
-| Tailwind 4.2 | Config CSS-first, sem arquivo de config JS, builds muito mais rápidos |
-| `packages/shared` | Único source of truth para tipos da API, elimina drift entre cliente e servidor |
+| Decisão                        | Justificativa                                                                   |
+| ------------------------------ | ------------------------------------------------------------------------------- |
+| Turborepo                      | Criado pela Vercel, integração nativa, cache de build distribuído               |
+| pnpm workspaces                | Performance superior ao npm/yarn em monorepos                                   |
+| Fastify + Vercel Fluid Compute | Zero-config desde Out/2025; concorrência nativa sem cold-start problemático     |
+| Neon serverless driver         | Driver WebSocket necessário em ambientes serverless (sem TCP persistente)       |
+| Drizzle ORM                    | Type-safe, sem runtime overhead, migrations versionadas com drizzle-kit         |
+| Tailwind 4.2                   | Config CSS-first, sem arquivo de config JS, builds muito mais rápidos           |
+| `packages/shared`              | Único source of truth para tipos da API, elimina drift entre cliente e servidor |

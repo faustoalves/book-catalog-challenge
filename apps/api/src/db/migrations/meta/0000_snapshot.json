@@ -1,0 +1,218 @@
+{
+  "id": "506b88a1-a636-4655-abba-d72a38128741",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.assuntos": {
+      "name": "assuntos",
+      "schema": "",
+      "columns": {
+        "cod_as": {
+          "name": "cod_as",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "descricao": {
+          "name": "descricao",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.autores": {
+      "name": "autores",
+      "schema": "",
+      "columns": {
+        "cod_au": {
+          "name": "cod_au",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "nome": {
+          "name": "nome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.livro_assunto": {
+      "name": "livro_assunto",
+      "schema": "",
+      "columns": {
+        "livro_codl": {
+          "name": "livro_codl",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "assunto_cod_as": {
+          "name": "assunto_cod_as",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "livro_assunto_livro_codl_livros_codl_fk": {
+          "name": "livro_assunto_livro_codl_livros_codl_fk",
+          "tableFrom": "livro_assunto",
+          "tableTo": "livros",
+          "columnsFrom": ["livro_codl"],
+          "columnsTo": ["codl"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "livro_assunto_assunto_cod_as_assuntos_cod_as_fk": {
+          "name": "livro_assunto_assunto_cod_as_assuntos_cod_as_fk",
+          "tableFrom": "livro_assunto",
+          "tableTo": "assuntos",
+          "columnsFrom": ["assunto_cod_as"],
+          "columnsTo": ["cod_as"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.livro_autor": {
+      "name": "livro_autor",
+      "schema": "",
+      "columns": {
+        "livro_codl": {
+          "name": "livro_codl",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "autor_cod_au": {
+          "name": "autor_cod_au",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "livro_autor_livro_codl_livros_codl_fk": {
+          "name": "livro_autor_livro_codl_livros_codl_fk",
+          "tableFrom": "livro_autor",
+          "tableTo": "livros",
+          "columnsFrom": ["livro_codl"],
+          "columnsTo": ["codl"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "livro_autor_autor_cod_au_autores_cod_au_fk": {
+          "name": "livro_autor_autor_cod_au_autores_cod_au_fk",
+          "tableFrom": "livro_autor",
+          "tableTo": "autores",
+          "columnsFrom": ["autor_cod_au"],
+          "columnsTo": ["cod_au"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.livros": {
+      "name": "livros",
+      "schema": "",
+      "columns": {
+        "codl": {
+          "name": "codl",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "titulo": {
+          "name": "titulo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "editora": {
+          "name": "editora",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "edicao": {
+          "name": "edicao",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ano_publicacao": {
+          "name": "ano_publicacao",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "valor": {
+          "name": "valor",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "imagem_url": {
+          "name": "imagem_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paginas": {
+          "name": "paginas",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

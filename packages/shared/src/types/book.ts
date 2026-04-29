@@ -36,3 +36,21 @@ export interface BooksQuery {
   q?: string
   genre?: string
 }
+
+export interface BookSuggestion {
+  googleId: string
+  titulo: string
+  autores: string[]
+  editora: string | null
+  anoPublicacao: number | null
+  paginas: number | null
+  descricao: string | null
+  mainCategory: string | null
+  imagemUrl: string | null
+  assuntos: string[]
+}
+
+export interface GoogleBooksSearchResult {
+  total: number
+  items: BookSuggestion[]
+}
