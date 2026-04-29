@@ -1,1 +1,2 @@
-export { default } from './dist/app.js'
+// Replaced by api/index.ts
+export {}
