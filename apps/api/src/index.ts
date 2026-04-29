@@ -1,4 +1,4 @@
-import app from './app.js'
+import { app } from './app.js'
 
 app.listen({ port: Number(process.env['PORT'] ?? 3001), host: '0.0.0.0' }, (err) => {
   if (err) {
