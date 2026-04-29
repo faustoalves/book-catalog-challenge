@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { db } from '../db/index.js'
 import { livros } from '../db/schema.js'
 
-const livroBody = z.object({
+const createLivroBody = z.object({
   titulo: z.string().min(1),
   editora: z.string().optional(),
   edicao: z.number().int().positive().optional(),
@@ -13,6 +13,8 @@ const livroBody = z.object({
   imagemUrl: z.string().url().optional(),
   paginas: z.number().int().positive().optional(),
 })
+
+const updateLivroBody = createLivroBody.partial()
 
 const listQuery = z.object({
   page: z.coerce.number().int().positive().default(1),
@@ -60,13 +62,13 @@ export async function livrosRoutes(app: FastifyInstance) {
   })
 
   app.post('/livros', async (request, reply) => {
-    const data = livroBody.parse(request.body)
+    const data = createLivroBody.parse(request.body)
     const [livro] = await db.insert(livros).values(data).returning()
     return reply.status(201).send(livro)
   })
 
   app.put('/livros/:codl', async (request, reply) => {
-    const data = livroBody.partial().parse(request.body)
+    const data = updateLivroBody.parse(request.body)
     const [livro] = await db
       .update(livros)
       .set(data)
