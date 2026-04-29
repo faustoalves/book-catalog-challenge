@@ -1,0 +1,37 @@
+{
+  "name": "@book-catalog/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file=.env --import=tsx/esm --watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@book-catalog/shared": "workspace:*",
+    "@fastify/cors": "^10.0.0",
+    "@neondatabase/serverless": "^1.0.0",
+    "drizzle-orm": "^0.45.0",
+    "fastify": "^5.8.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@book-catalog/tsconfig": "workspace:*",
+    "@eslint/js": "^9.25.0",
+    "@types/node": "^22.0.0",
+    "drizzle-kit": "^0.31.0",
+    "eslint": "^9.25.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.8.0",
+    "typescript-eslint": "^8.31.0",
+    "vitest": "^3.1.0"
+  }
+}

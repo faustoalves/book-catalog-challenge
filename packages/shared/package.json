@@ -1,0 +1,12 @@
+{
+  "name": "@book-catalog/shared",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "devDependencies": {
+    "@book-catalog/tsconfig": "workspace:*",
+    "typescript": "^5.8.0"
+  }
+}
