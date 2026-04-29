@@ -2,7 +2,7 @@ import { count, desc, eq, ilike } from 'drizzle-orm'
 import type { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { db } from '../db/index.js'
-import { livros } from '../db/schema.js'
+import { livros, type LivroInsert } from '../db/schema.js'
 
 const createLivroBody = z.object({
   titulo: z.string().min(1),
@@ -62,7 +62,7 @@ export async function livrosRoutes(app: FastifyInstance) {
   })
 
   app.post('/livros', async (request, reply) => {
-    const data = createLivroBody.parse(request.body)
+    const data = createLivroBody.parse(request.body) as LivroInsert
     const [livro] = await db.insert(livros).values(data).returning()
     return reply.status(201).send(livro)
   })
