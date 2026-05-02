@@ -28,13 +28,16 @@ function NavSelectTrigger({ className, children, ...props }: SelectPrimitive.Tri
 
 function NavSelectContent({
   className,
+  listClassName,
   children,
   side = 'bottom',
   sideOffset = 8,
   align = 'start',
   ...props
 }: SelectPrimitive.Popup.Props &
-  Pick<SelectPrimitive.Positioner.Props, 'align' | 'side' | 'sideOffset'>) {
+  Pick<SelectPrimitive.Positioner.Props, 'align' | 'side' | 'sideOffset'> & {
+    listClassName?: string
+  }) {
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Positioner
@@ -51,7 +54,7 @@ function NavSelectContent({
           )}
           {...props}
         >
-          <SelectPrimitive.List className="divide-y divide-green-500/30">
+          <SelectPrimitive.List className={cn('divide-y divide-green-500/30', listClassName)}>
             {children}
           </SelectPrimitive.List>
         </SelectPrimitive.Popup>
