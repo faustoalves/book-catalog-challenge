@@ -18,7 +18,9 @@ export const autores = pgTable('autores', {
 
 export const assuntos = pgTable('assuntos', {
   codAs: serial('cod_as').primaryKey(),
-  descricao: text('descricao').notNull(),
+  nome: text('nome').notNull(),
+  slug: text('slug').notNull().unique(),
+  descricao: text('descricao'),
 })
 
 export const livroAutor = pgTable('livro_autor', {

@@ -1,0 +1,1 @@
+ALTER TABLE "assuntos" ALTER COLUMN "slug" SET NOT NULL;

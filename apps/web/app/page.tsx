@@ -1,18 +1,9 @@
-import BookCover from '@/components/ui/books/book-cover/BookCover'
 import { Button } from '@/components/ui/button'
 import HeaderContainer from '@/components/ui/containers/header-container/HeaderContainer'
-import { Input } from '@/components/ui/input'
-import {
-  InputGroup,
-  InputGroupInput,
-  InputGroupPrefix,
-  InputGroupSuffix,
-} from '@/components/ui/input-group'
-import { Label } from '@/components/ui/label'
 import NavBar from '@/components/ui/navbar/Navbar'
 import { Textarea } from '@/components/ui/textarea'
 import TitleDescription from '@/components/ui/titles/TitleDescription'
-import { ChevronRightIcon, Search, SearchIcon, X } from 'lucide-react'
+import { ChevronRightIcon } from 'lucide-react'
 
 export default function HomePage() {
   return (

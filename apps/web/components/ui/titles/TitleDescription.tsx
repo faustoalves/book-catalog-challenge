@@ -38,7 +38,9 @@ const TitleDescription: React.FC<TitleDescriptionProps> = ({
         <h1 className={cn('font-playfair text-balance', titleClasses)}>{title}</h1>
       )}
 
-      {description && <p className="body-18 text-balance text-black">{description}</p>}
+      {description && (
+        <p className={cn('text-balance text-black', descriptionClasses)}>{description}</p>
+      )}
     </div>
   )
 }

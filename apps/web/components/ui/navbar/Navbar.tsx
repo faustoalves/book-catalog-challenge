@@ -1,15 +1,9 @@
 import React from 'react'
 import Logo from '@/components/ui/elements/logo/Logo'
-import {
-  NavSelect,
-  NavSelectContent,
-  NavSelectItem,
-  NavSelectTrigger,
-  NavSelectValue,
-} from '../nav-select'
 import { Button } from '../button'
 import { Plus, SearchIcon } from 'lucide-react'
 import { InputGroup, InputGroupInput, InputGroupSuffix } from '../input-group'
+import CategorySelector from '../category-selector/CategorySelector'
 
 const NavBar: React.FC = () => {
   return (
@@ -25,16 +19,7 @@ const NavBar: React.FC = () => {
           </InputGroup>
         </div>
         <div className="hidden items-center gap-2 lg:flex">
-          <NavSelect>
-            <NavSelectTrigger>
-              <NavSelectValue placeholder="Categorias" />
-            </NavSelectTrigger>
-            <NavSelectContent>
-              <NavSelectItem value="fiction">Ficção</NavSelectItem>
-              <NavSelectItem value="romance">Romance</NavSelectItem>
-              <NavSelectItem value="sci-fi">Ficção Científica</NavSelectItem>
-            </NavSelectContent>
-          </NavSelect>
+          <CategorySelector />
           <Button color="cream" variant="solid" icon={Plus}>
             Adicionar livro
           </Button>

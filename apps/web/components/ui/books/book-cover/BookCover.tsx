@@ -7,26 +7,29 @@ type BookCoverProps = {
   size?: 'small' | 'large'
 }
 
+const sizeMap = {
+  small:
+    'max-h-[205px] max-w-[150px] md:max-w-[200px] md:max-h-[238px] xl:max-w-[240px] xl:max-h-[240px]',
+  large: 'max-h-[320px] min-h-[200px] w-auto',
+}
+
 const BookCover: React.FC<BookCoverProps> = ({
   imageUrl,
   alt = 'Capa do livro',
   className = '',
   size = 'small',
 }) => {
-  const sizeClasses =
-    size === 'small'
-      ? 'max-h-[205px] max-w-[150px] md:max-w-[200px] md:max-h-[238px] xl:max-w-[240px] xl:max-h-[240px]'
-      : 'max-h-[320px] min-h-[200px] w-auto'
   return (
     <div className={`relative inline-block ${className}`}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={imageUrl}
         alt={alt}
-        className="block h-auto max-h-[240px] min-h-[120px] w-auto object-cover"
+        className={`block h-auto w-auto object-cover ${sizeMap[size]}`}
         loading="lazy"
       />
 
-      {/* Overlay — mesmo tamanho da imageUrl via inset-0 w-full h-full */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/over_book_layer.png"
         alt=""
@@ -34,7 +37,7 @@ const BookCover: React.FC<BookCoverProps> = ({
         className="pointer-events-none absolute inset-0 h-full w-full object-cover"
       />
 
-      {/* Sombra lateral direita */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/right_book_shadow.png"
         alt=""
@@ -42,7 +45,7 @@ const BookCover: React.FC<BookCoverProps> = ({
         className="pointer-events-none absolute left-full top-0 h-full"
       />
 
-      {/* Sombra inferior */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/bottom_book_shadow.png"
         alt=""
