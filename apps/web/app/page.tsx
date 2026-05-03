@@ -1,31 +1,29 @@
-import { Button } from '@/components/ui/button'
-import HeaderContainer from '@/components/ui/containers/header-container/HeaderContainer'
-import NavBar from '@/components/ui/navbar/Navbar'
-import { Textarea } from '@/components/ui/textarea'
-import TitleDescription from '@/components/ui/titles/TitleDescription'
-import { ChevronRightIcon } from 'lucide-react'
+import BooksSlider from '@/components/ui/books/books-slider/BooksSlider'
+import { BookSlider } from '@book-catalog/shared'
 
-export default function HomePage() {
+async function getHomeData() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/home`, {
+    cache: 'no-store',
+  })
+  if (!res.ok) throw new Error(`API error: ${res.status}`)
+  return res.json()
+}
+
+export default async function HomePage() {
+  const data = await getHomeData()
+
   return (
     <main className="h-full w-full">
-      <NavBar />
-      <HeaderContainer>
-        <TitleDescription
-          type="large"
-          title="Organize sua leitura, expanda seu mundo"
-          description="Monte sua lista de leituras, acompanhe o que já leu e encontre sua próxima grande história, tudo em um só lugar."
+      {data.map((item: BookSlider) => (
+        <BooksSlider
+          key={item.slug}
+          nome={item.nome}
+          descricao={item.descricao}
+          slug={item.slug}
+          livros={item.livros}
+          count={item.count}
         />
-        <Button color="cream" variant="solid" icon={ChevronRightIcon} />
-
-        <Textarea placeholder="Digite o título do livro" className="w-1/4" rows={10} />
-        {/* 
-        <div className="bg-cream-300 flex w-1/4 items-center justify-center p-4">
-          <BookCover
-            imageUrl="https://m.media-amazon.com/images/I/513Xm7DXw0L._SY445_SX342_QL70_ML2_.jpg"
-            alt="Improvisado"
-          />
-        </div> */}
-      </HeaderContainer>
+      ))}
     </main>
   )
 }

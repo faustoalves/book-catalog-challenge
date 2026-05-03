@@ -11,7 +11,7 @@ const SliderContainer: React.FC<SliderContainerProps> = ({ children, className }
     <section
       className={cn('w-full', 'odd:bg-cream-100 even:bg-cream-200', 'lg:px-auto', className)}
     >
-      <div className="container mx-auto max-w-[1280px] px-4 py-8">{children}</div>
+      <div className="container mx-auto max-w-[1280px] py-8">{children}</div>
     </section>
   )
 }

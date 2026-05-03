@@ -74,7 +74,7 @@ const buttonVariants = cva(
 
 type ButtonProps = ButtonPrimitive.Props &
   VariantProps<typeof buttonVariants> & {
-    icon: LucideIcon
+    icon?: LucideIcon
   }
 
 function Button({ className, variant, color, icon: Icon, children, ...props }: ButtonProps) {
@@ -87,7 +87,7 @@ function Button({ className, variant, color, icon: Icon, children, ...props }: B
       className={cn('cursor-pointer', buttonVariants({ variant, color }), paddingClass, className)}
       {...props}
     >
-      <Icon />
+      {Icon && <Icon />}
       {children}
     </ButtonPrimitive>
   )

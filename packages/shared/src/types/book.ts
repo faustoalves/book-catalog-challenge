@@ -11,6 +11,21 @@ export interface Book {
   updatedAt: string
 }
 
+export interface BookSlider {
+  nome: string
+  descricao: string
+  slug: string
+  livros: BookApi[]
+  count: number
+}
+
+export interface BookApi {
+  slug: string | null
+  titulo: string
+  imagemUrl: string | null
+  autor: string | null
+}
+
 export interface CreateBookDto {
   title: string
   author: string
