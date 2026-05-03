@@ -1,0 +1,19 @@
+import { cn } from '@/lib/utils'
+import React from 'react'
+
+type BasicContainerProps = {
+  children: React.ReactNode
+  className?: string
+}
+
+const BasicContainer: React.FC<BasicContainerProps> = ({ children, className }) => {
+  return (
+    <section
+      className={cn('w-full', 'odd:bg-cream-100 even:bg-cream-200', 'lg:px-auto', className)}
+    >
+      <div className="container mx-auto max-w-[1280px] py-8">{children}</div>
+    </section>
+  )
+}
+
+export default BasicContainer

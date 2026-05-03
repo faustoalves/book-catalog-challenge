@@ -19,11 +19,13 @@ const BookCover: React.FC<BookCoverProps> = ({
   className = '',
   size = 'small',
 }) => {
+  const adjustedImageUrl = size === 'small' ? imageUrl.replace('zoom=3', 'zoom=2') : imageUrl
+
   return (
     <div className={`relative inline-block ${className}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={imageUrl}
+        src={adjustedImageUrl}
         alt={alt}
         className={`block h-auto w-auto object-cover ${sizeMap[size]}`}
         loading="lazy"
@@ -42,7 +44,7 @@ const BookCover: React.FC<BookCoverProps> = ({
         src="/right_book_shadow.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute left-full top-0 h-full"
+        className="pointer-events-none absolute top-0 left-full h-full"
       />
 
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -50,7 +52,7 @@ const BookCover: React.FC<BookCoverProps> = ({
         src="/bottom_book_shadow.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute left-0 top-full w-full"
+        className="pointer-events-none absolute top-full left-0 w-full"
       />
     </div>
   )

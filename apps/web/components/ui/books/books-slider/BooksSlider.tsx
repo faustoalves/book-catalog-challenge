@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import type { BookSlider } from '@book-catalog/shared'
-import { ArrowRightIcon } from 'lucide-react'
 
 import TitleDescription from '@/components/ui/titles/TitleDescription'
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel'
@@ -9,7 +8,7 @@ import { BooksSliderNav } from './BooksSliderNav'
 import BookItem from '../book-item/BookItem'
 import { Button } from '../../button'
 
-const BooksSlider: React.FC<BookSlider> = ({ nome, descricao, livros, count }) => {
+const BooksSlider: React.FC<BookSlider> = ({ nome, descricao, livros, count, slug }) => {
   return (
     <SliderContainer className="lg:px-auto px-0">
       <Carousel opts={{ align: 'start' }} className="w-full">
@@ -23,7 +22,7 @@ const BooksSlider: React.FC<BookSlider> = ({ nome, descricao, livros, count }) =
           {livros.map((book) => (
             <CarouselItem
               key={book.slug}
-              className="flex basis-3/5 items-center justify-center lg:basis-1/4"
+              className="flex basis-3/5 items-center justify-center md:basis-1/3 lg:basis-1/4"
             >
               <Link href={`/livro/${book.slug}`} className="group flex flex-col gap-2">
                 <BookItem {...book} />
@@ -33,14 +32,11 @@ const BooksSlider: React.FC<BookSlider> = ({ nome, descricao, livros, count }) =
         </CarouselContent>
       </Carousel>
       <div className="flex items-center justify-center px-4">
-        <Button
-          variant="outline"
-          color="green"
-          icon={ArrowRightIcon}
-          className="ml-auto w-full lg:w-auto"
-        >
-          Ver todos - {count}
-        </Button>
+        <Link href={`/categoria/${slug}`} className="flex w-full items-center justify-center">
+          <Button variant="outline" color="green" className="ml-auto w-full lg:w-auto">
+            Ver todos - {count}
+          </Button>
+        </Link>
       </div>
     </SliderContainer>
   )

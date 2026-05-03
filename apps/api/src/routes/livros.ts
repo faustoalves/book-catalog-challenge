@@ -56,9 +56,14 @@ export async function livrosRoutes(app: FastifyInstance) {
     const [livro] = await db.select().from(livros).where(eq(livros.slug, slug)).limit(1)
     if (!livro) return reply.status(404).send({ error: 'Livro not found' })
 
-    const [categorias, autoresDoLivro] = await Promise.all([
+    const [categoriasRaw, autoresDoLivro] = await Promise.all([
       db
-        .select({ nome: assuntos.nome, slug: assuntos.slug })
+        .select({
+          codAs: assuntos.codAs,
+          nome: assuntos.nome,
+          slug: assuntos.slug,
+          descricao: assuntos.descricao,
+        })
         .from(livroAssunto)
         .innerJoin(assuntos, eq(assuntos.codAs, livroAssunto.assuntoCodAs))
         .where(eq(livroAssunto.livroCodl, livro.codl)),
@@ -69,7 +74,71 @@ export async function livrosRoutes(app: FastifyInstance) {
         .where(eq(livroAutor.livroCodl, livro.codl)),
     ])
 
-    return reply.send({ ...livro, categorias, autores: autoresDoLivro.map((a) => a.nome) })
+    const categorias = categoriasRaw.map(({ codAs: _, ...c }) => c)
+
+    const primeiraCategoria = categoriasRaw[0]
+    let categoriaRelacionada = null
+
+    if (primeiraCategoria) {
+      const [countResult, livrosRows] = await Promise.all([
+        db
+          .select({ total: count() })
+          .from(livroAssunto)
+          .where(eq(livroAssunto.assuntoCodAs, primeiraCategoria.codAs)),
+        db
+          .select({
+            codl: livros.codl,
+            titulo: livros.titulo,
+            slug: livros.slug,
+            imagemUrl: livros.imagemUrl,
+            autorNome: autores.nome,
+          })
+          .from(livroAssunto)
+          .innerJoin(livros, eq(livros.codl, livroAssunto.livroCodl))
+          .leftJoin(livroAutor, eq(livroAutor.livroCodl, livros.codl))
+          .leftJoin(autores, eq(autores.codAu, livroAutor.autorCodAu))
+          .where(eq(livroAssunto.assuntoCodAs, primeiraCategoria.codAs))
+          .orderBy(desc(livros.codl)),
+      ])
+
+      type LivroEntry = {
+        titulo: string
+        slug: string | null
+        imagemUrl: string | null
+        autores: string[]
+      }
+      const livrosMap = new Map<number, LivroEntry>()
+      for (const row of livrosRows) {
+        if (!livrosMap.has(row.codl)) {
+          if (livrosMap.size >= 8) continue
+          livrosMap.set(row.codl, {
+            titulo: row.titulo,
+            slug: row.slug,
+            imagemUrl: row.imagemUrl,
+            autores: [],
+          })
+        }
+        if (row.autorNome) livrosMap.get(row.codl)!.autores.push(row.autorNome)
+      }
+
+      categoriaRelacionada = {
+        nome: primeiraCategoria.nome,
+        descricao: primeiraCategoria.descricao,
+        slug: primeiraCategoria.slug,
+        count: Number(countResult[0]?.total ?? 0),
+        livros: Array.from(livrosMap.values()).map(({ autores: a, ...l }) => ({
+          ...l,
+          autor: a.join(', ') || null,
+        })),
+      }
+    }
+
+    return reply.send({
+      ...livro,
+      categorias,
+      autores: autoresDoLivro.map((a) => a.nome),
+      categoriaRelacionada,
+    })
   })
 
   app.post('/livros', async (request, reply) => {
