@@ -74,7 +74,7 @@ export async function livrosRoutes(app: FastifyInstance) {
         .where(eq(livroAutor.livroCodl, livro.codl)),
     ])
 
-    const categorias = categoriasRaw.map(({ codAs: _, ...c }) => c)
+    const categorias = categoriasRaw
 
     const primeiraCategoria = categoriasRaw[0]
     let categoriaRelacionada = null

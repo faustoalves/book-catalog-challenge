@@ -20,8 +20,8 @@ export function Step3Form() {
         paginas: data.paginas ? parseInt(data.paginas) : undefined,
         descricao: data.descricao || undefined,
         imagemUrl: data.imagemUrl || undefined,
-        valor: data.valor || '0',
-        assuntos: [],
+        valor: data.valor.replace(',', '.') || '0',
+        assuntos: data.assuntoCodAs ? [parseInt(data.assuntoCodAs)] : [],
       }),
     })
     reset()

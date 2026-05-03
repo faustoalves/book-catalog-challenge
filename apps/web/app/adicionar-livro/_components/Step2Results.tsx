@@ -5,6 +5,7 @@ import { useAddBook, type BookSuggestion } from '@/context/AddBookContext'
 import { fetcher } from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
+import BookCover from '@/components/ui/books/book-cover/BookCover'
 
 export function Step2Results() {
   const {
@@ -58,7 +59,7 @@ export function Step2Results() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         {searchResults.map((book) => (
           <BookResultCard key={book.googleId} book={book} onSelect={selectBook} />
         ))}
@@ -85,30 +86,35 @@ function BookResultCard({
   onSelect: (book: BookSuggestion) => void
 }) {
   return (
-    <div className="border-cream-300 flex gap-3 rounded-[16px] border bg-white p-3">
-      {book.imagemUrl && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={book.imagemUrl}
-          alt={book.titulo}
-          className="h-24 w-16 flex-shrink-0 rounded object-cover"
-        />
-      )}
-      <div className="flex min-w-0 flex-col justify-between gap-2">
-        <div>
-          <p className="body-14 text-cream-900 line-clamp-2 font-semibold">{book.titulo}</p>
-          <p className="body-14 text-cream-700">{book.autores.join(', ')}</p>
-          {book.editora && <p className="body-14 text-cream-600">{book.editora}</p>}
+    <div className="flex basis-1/2 flex-col items-center justify-center pb-8 lg:basis-1/4">
+      <div className="group flex h-[440px] min-h-[440px] w-full flex-col items-center justify-center gap-4 lg:h-[360px] lg:min-h-[360px]">
+        <div className="flex w-full flex-1 flex-col items-center justify-center">
+          <BookCover
+            imageUrl={
+              book.imagemUrl ??
+              'https://books.google.com/books/content?id=hzTjygEACAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api'
+            }
+            alt={book.titulo}
+            size="small"
+          />
         </div>
-        <Button
-          variant="solid"
-          color="green"
-          icon={ChevronRightIcon}
-          onClick={() => onSelect(book)}
-          className="self-start"
-        >
-          Selecionar
-        </Button>
+        <div className="flex h-[110px] w-full flex-col items-center justify-center gap-2">
+          <p className="title-20 font-playfair line-clamp-1 text-balance px-2 text-center font-semibold text-green-700 group-hover:underline">
+            {book.titulo}
+          </p>
+          <p className="body-16 line-clamp-1 text-center text-gray-700">
+            {book.autores.join(', ')}
+          </p>
+          <Button
+            variant="solid"
+            color="green"
+            icon={ChevronRightIcon}
+            onClick={() => onSelect(book)}
+            className="w-full lg:w-auto"
+          >
+            Selecionar
+          </Button>
+        </div>
       </div>
     </div>
   )

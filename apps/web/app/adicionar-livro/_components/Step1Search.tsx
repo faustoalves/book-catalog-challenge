@@ -19,7 +19,7 @@ export function Step1Search() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className="mx-auto flex max-w-2xl flex-col gap-4">
       <div className="flex flex-col gap-2">
         <Label htmlFor="titulo">Nome do livro</Label>
         <Input
@@ -31,7 +31,7 @@ export function Step1Search() {
         />
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="mb-6 flex flex-col gap-2">
         <Label htmlFor="autor">Nome do autor</Label>
         <Input
           id="autor"

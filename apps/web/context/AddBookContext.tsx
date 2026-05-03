@@ -21,7 +21,7 @@ export type BookFormData = {
   paginas: string
   descricao: string
   imagemUrl: string
-  categoria: string
+  assuntoCodAs: string // ID do assunto como string (compatível com form inputs)
   valor: string
 }
 
@@ -32,7 +32,7 @@ const defaultFormData: BookFormData = {
   paginas: '',
   descricao: '',
   imagemUrl: '',
-  categoria: '',
+  assuntoCodAs: '',
   valor: '',
 }
 
@@ -76,7 +76,7 @@ export function AddBookProvider({ children }: { children: ReactNode }) {
       paginas: book.paginas?.toString() ?? '',
       descricao: book.descricao ?? '',
       imagemUrl: book.imagemUrl ?? '',
-      categoria: book.assuntos[0] ?? '',
+      assuntoCodAs: '', // não é possível mapear subjects do Google Books para IDs locais
       valor: book.valor ?? '',
     })
     setStep(3)

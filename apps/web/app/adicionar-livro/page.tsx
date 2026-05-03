@@ -4,6 +4,10 @@ import { useAddBook } from '@/context/AddBookContext'
 import { Step1Search } from './_components/Step1Search'
 import { Step2Results } from './_components/Step2Results'
 import { Step3Form } from './_components/Step3Form'
+import HeaderContainer from '@/components/ui/containers/header-container/HeaderContainer'
+import NavBar from '@/components/ui/navbar/Navbar'
+import TitleDescription from '@/components/ui/titles/TitleDescription'
+import Footer from '@/components/ui/footer/Footer'
 
 const STEP_TITLES = {
   1: {
@@ -33,20 +37,21 @@ export default function AddBookPage() {
     : STEP_TITLES[step]
 
   return (
-    <main className="min-h-screen px-6 py-10">
-      <div className="mx-auto max-w-3xl">
-        <div className="mb-8 flex items-start justify-between">
-          <div>
-            <h1 className="title-40 text-cream-900">{title}</h1>
-            <p className="body-18 text-cream-800 mt-2">{description}</p>
+    <main className="">
+      <NavBar />
+      <HeaderContainer>
+        <div className="mx-auto w-full pb-24 lg:min-h-[600px]">
+          <div className="mb-16 flex items-start justify-between">
+            <TitleDescription type="medium" title={title} description={description} />
+            <StepIndicator current={step} />
           </div>
-          <StepIndicator current={step} />
-        </div>
 
-        {step === 1 && <Step1Search />}
-        {step === 2 && <Step2Results />}
-        {step === 3 && <Step3Form />}
-      </div>
+          {step === 1 && <Step1Search />}
+          {step === 2 && <Step2Results />}
+          {step === 3 && <Step3Form />}
+        </div>
+      </HeaderContainer>
+      <Footer />
     </main>
   )
 }

@@ -5,6 +5,10 @@ import { useParams, useRouter } from 'next/navigation'
 import { BookForm } from '@/components/ui/books/book-form/BookForm'
 import type { BookFormData } from '@/context/AddBookContext'
 import { fetcher } from '@/lib/api'
+import NavBar from '@/components/ui/navbar/Navbar'
+import HeaderContainer from '@/components/ui/containers/header-container/HeaderContainer'
+import TitleDescription from '@/components/ui/titles/TitleDescription'
+import Footer from '@/components/ui/footer/Footer'
 
 export default function EditBookPage() {
   const params = useParams<{ 'slug-do-livro': string }>()
@@ -25,7 +29,9 @@ export default function EditBookPage() {
           paginas: livro.paginas != null ? String(livro.paginas) : '',
           descricao: (livro.descricao as string) ?? '',
           imagemUrl: (livro.imagemUrl as string) ?? '',
-          categoria: (livro.categorias as Array<{ nome: string }> | undefined)?.[0]?.nome ?? '',
+          assuntoCodAs: String(
+            (livro.categorias as Array<{ codAs: number }> | undefined)?.[0]?.codAs ?? '',
+          ),
           valor: (livro.valor as string) ?? '',
         })
       } catch {
@@ -36,6 +42,11 @@ export default function EditBookPage() {
     }
     fetchBook()
   }, [slug, router])
+
+  async function handleDelete() {
+    await fetcher(`/api/livros/${slug}`, { method: 'DELETE' })
+    router.push('/')
+  }
 
   async function handleSubmit(data: BookFormData) {
     const livro = await fetcher<{ slug: string }>(`/api/livros/${slug}`, {
@@ -63,21 +74,33 @@ export default function EditBookPage() {
   if (!initialData) return null
 
   return (
-    <main className="min-h-screen px-6 py-10">
+    <main className="min-h-screen">
+      <NavBar />
+      <HeaderContainer>
+        <div className="mx-auto w-full lg:min-h-[600px]">
+          <div className="mb-16 flex items-start justify-between">
+            <TitleDescription
+              type="medium"
+              title="Editar livro"
+              description="Ajuste as informações do livro e salve as alterações."
+            />
+          </div>
+          <BookForm
+            initialData={initialData}
+            mode="edit"
+            onSubmit={handleSubmit}
+            onDelete={handleDelete}
+            onBack={() => router.back()}
+          />
+        </div>
+      </HeaderContainer>
+      <Footer />
+
       <div className="mx-auto max-w-3xl">
         <div className="mb-8">
-          <h1 className="title-40 text-cream-900">Editar livro</h1>
-          <p className="body-18 text-cream-800 mt-2">
-            Ajuste as informações do livro e salve as alterações.
-          </p>
+          <h1 className="title-40 text-cream-900"></h1>
+          <p className="body-18 text-cream-800 mt-2"></p>
         </div>
-
-        <BookForm
-          initialData={initialData}
-          mode="edit"
-          onSubmit={handleSubmit}
-          onBack={() => router.back()}
-        />
       </div>
     </main>
   )

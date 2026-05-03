@@ -4,6 +4,7 @@ import Footer from '@/components/ui/footer/Footer'
 import HeaderContainer from '@/components/ui/containers/header-container/HeaderContainer'
 import NavBar from '@/components/ui/navbar/Navbar'
 import TitleDescription from '@/components/ui/titles/TitleDescription'
+import Image from 'next/image'
 
 async function getHomeData() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/home`, {
@@ -19,8 +20,29 @@ export default async function HomePage() {
   return (
     <main className="h-full w-full">
       <NavBar />
-      <HeaderContainer>
-        <TitleDescription type="large" title="Livros" description="Descrição dos livros" />
+      <HeaderContainer className="px-0">
+        <div className="lg:px-auto mx-auto flex w-full flex-col items-center justify-center px-0 md:flex-row">
+          <TitleDescription
+            type="large"
+            title="Organize sua leitura, expanda seu mundo"
+            description="Monte sua lista de leituras, acompanhe o que já leu e encontre sua próxima grande história, tudo em um só lugar."
+            className="basis-1/1 lg:px-auto px-4 lg:basis-1/2"
+          />
+          <Image
+            src="/Hero_mobile.png"
+            alt="Home Hero"
+            width={500}
+            height={500}
+            className="ml-auto block md:hidden"
+          />
+          <Image
+            src="/Hero_Desktop.png"
+            alt="Home Hero"
+            width={500}
+            height={500}
+            className="hidden md:block"
+          />
+        </div>
       </HeaderContainer>
       {data.map((item: BookSlider) => (
         <BooksSlider

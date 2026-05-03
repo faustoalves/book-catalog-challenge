@@ -1,6 +1,5 @@
 'use client'
-
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import {
   NavSelect,
   NavSelectContent,
@@ -12,18 +11,18 @@ import {
 type Assunto = { nome: string; slug: string }
 
 export function CategorySelectorClient({ assuntos }: { assuntos: Assunto[] }) {
-  const router = useRouter()
-
   return (
-    <NavSelect onValueChange={(value) => router.push(`/categoria/${value}`)}>
+    <NavSelect>
       <NavSelectTrigger>
         <NavSelectValue placeholder="Categorias" />
       </NavSelectTrigger>
       <NavSelectContent listClassName="max-h-[350px] overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-green-700 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-green-500">
         {assuntos.map((assunto) => (
-          <NavSelectItem key={assunto.slug} value={assunto.slug}>
-            {assunto.nome}
-          </NavSelectItem>
+          <Link href={`/categoria/${assunto.slug}`} key={assunto.slug}>
+            <NavSelectItem key={assunto.slug} value={assunto.slug}>
+              {assunto.nome}
+            </NavSelectItem>
+          </Link>
         ))}
       </NavSelectContent>
     </NavSelect>
