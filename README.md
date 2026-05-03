@@ -113,13 +113,38 @@ Classes utilitárias `@utility` com suporte a variantes responsivas (`md:`, `lg:
 
 ## Fluxo de adicionar livro
 
+O fluxo de inclusão é dividido em 3 passos e utiliza a **Google Books API** para pré-preencher os dados do livro automaticamente.
+
 ```
-Step 1 → busca por título/autor no Google Books
-Step 2 → seleção do livro (ou "Refazer pesquisa")
-Step 3 → formulário pré-preenchido → POST /api/livros
+Step 1 → usuário informa título e/ou autor
+Step 2 → frontend consulta GET /api/google-books/search → exibe lista de resultados
+           └── usuário seleciona um livro (ou volta para Step 1)
+Step 3 → formulário pré-preenchido com dados do Google Books
+           └── usuário revisa, ajusta categoria e confirma → POST /api/livros
 ```
 
-Estado gerenciado via `AddBookContext` (React Context). Rota client-side com `layout.tsx` como provider.
+### Google Books API
+
+A API da Google Books é usada exclusivamente no processo de busca durante a inclusão. Ela **não é usada** para armazenar ou exibir livros já cadastrados.
+
+| Campo retornado pelo Google Books | Mapeamento no formulário                                                 |
+| --------------------------------- | ------------------------------------------------------------------------ |
+| `titulo`                          | Nome do livro                                                            |
+| `autores[]`                       | Nome do autor (concatenado com `, `)                                     |
+| `editora`                         | Editora                                                                  |
+| `paginas`                         | Páginas                                                                  |
+| `descricao`                       | Descrição                                                                |
+| `imagemUrl`                       | URL da imagem                                                            |
+| `valor`                           | Preço sugerido                                                           |
+| `assuntos[]`                      | Categoria (não mapeável automaticamente — usuário seleciona manualmente) |
+
+> **Nota:** Os `assuntos` retornados pelo Google Books são strings em inglês (ex: `"Fiction"`) e não têm correspondência direta com os IDs dos assuntos cadastrados no banco. Por isso, o campo de categoria permanece vazio no Step 3 e o usuário deve selecioná-lo manualmente.
+
+A chave da API é configurada via variável de ambiente `GOOGLE_BOOKS_API_KEY` no `apps/api/.env`.
+
+### Estado do fluxo
+
+O estado dos 3 passos é gerenciado via `AddBookContext` (React Context), localizado em `apps/web/context/AddBookContext.tsx`. A rota `/adicionar-livro` usa um `layout.tsx` como provider do context.
 
 ## Variáveis de ambiente
 
