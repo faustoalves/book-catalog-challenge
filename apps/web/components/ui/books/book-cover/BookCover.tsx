@@ -10,7 +10,8 @@ type BookCoverProps = {
 const sizeMap = {
   small:
     'max-h-[205px] max-w-[150px] md:max-w-[200px] md:max-h-[238px] xl:max-w-[240px] xl:max-h-[240px]',
-  large: 'max-h-[320px] min-h-[200px] w-auto',
+  large:
+    'max-h-[300px] min-h-[250px] md:max-h-[400px] md:min-h-[350px] lg:max-h-[500px] lg:min-h-[450px] w-auto',
 }
 
 const BookCover: React.FC<BookCoverProps> = ({

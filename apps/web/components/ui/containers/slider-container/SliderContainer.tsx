@@ -9,7 +9,12 @@ type SliderContainerProps = {
 const SliderContainer: React.FC<SliderContainerProps> = ({ children, className }) => {
   return (
     <section
-      className={cn('w-full', 'odd:bg-cream-100 even:bg-cream-200', 'lg:px-auto', className)}
+      className={cn(
+        'border-cream-300 w-full border-t',
+        'odd:bg-cream-200 even:bg-cream-100',
+        'lg:px-auto',
+        className,
+      )}
     >
       <div className="container mx-auto max-w-[1280px] py-8">{children}</div>
     </section>

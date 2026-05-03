@@ -1,12 +1,41 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useForm, Controller } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import { ChevronLeftIcon, PlusIcon, PencilIcon } from 'lucide-react'
+
 import { type BookFormData } from '@/context/AddBookContext'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import { ChevronLeftIcon, PlusIcon, PencilIcon } from 'lucide-react'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { fetcher } from '@/lib/api'
+
+const bookSchema = z.object({
+  titulo: z.string().min(1, 'Nome do livro é obrigatório'),
+  autor: z.string().min(1, 'Nome do autor é obrigatório'),
+  editora: z.string(),
+  paginas: z.string().refine((v) => v === '' || /^\d+$/.test(v), 'Deve ser um número inteiro'),
+  descricao: z.string(),
+  imagemUrl: z
+    .string()
+    .refine((v) => v === '' || z.string().url().safeParse(v).success, 'URL inválida'),
+  categoria: z.string(),
+  valor: z
+    .string()
+    .refine((v) => v === '' || /^\d+([.,]\d{1,2})?$/.test(v), 'Formato inválido: use "29,99"'),
+})
+
+type Assunto = { nome: string; slug: string }
 
 type BookFormProps = {
   initialData: BookFormData
@@ -16,88 +45,78 @@ type BookFormProps = {
 }
 
 export function BookForm({ initialData, mode, onSubmit, onBack }: BookFormProps) {
-  const [formData, setFormData] = useState<BookFormData>(initialData)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [assuntos, setAssuntos] = useState<Assunto[]>([])
 
-  function handleChange(field: keyof BookFormData, value: string) {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }
+  useEffect(() => {
+    fetcher<Assunto[]>('/api/assuntos')
+      .then(setAssuntos)
+      .catch(() => {})
+  }, [])
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setIsSubmitting(true)
-    try {
-      await onSubmit(formData)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors, isSubmitting },
+  } = useForm<BookFormData>({
+    resolver: zodResolver(bookSchema),
+    defaultValues: initialData,
+  })
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
         <Label htmlFor="titulo">Nome do livro</Label>
-        <Input
-          id="titulo"
-          placeholder="Informe o nome do livro"
-          value={formData.titulo}
-          onChange={(e) => handleChange('titulo', e.target.value)}
-          required
-        />
+        <Input id="titulo" placeholder="Informe o nome do livro" {...register('titulo')} />
+        {errors.titulo && <span className="body-12 text-red-500">{errors.titulo.message}</span>}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-2">
           <Label htmlFor="autor">Nome do autor</Label>
-          <Input
-            id="autor"
-            placeholder="Informe o nome do autor"
-            value={formData.autor}
-            onChange={(e) => handleChange('autor', e.target.value)}
-          />
+          <Input id="autor" placeholder="Informe o nome do autor" {...register('autor')} />
+          {errors.autor && <span className="body-12 text-red-500">{errors.autor.message}</span>}
         </div>
 
         <div className="flex flex-col gap-2">
           <Label htmlFor="editora">Editora</Label>
-          <Input
-            id="editora"
-            placeholder="Informe a editora"
-            value={formData.editora}
-            onChange={(e) => handleChange('editora', e.target.value)}
-          />
+          <Input id="editora" placeholder="Informe a editora" {...register('editora')} />
         </div>
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label htmlFor="categoria">Categoria</Label>
-        <Input
-          id="categoria"
-          placeholder="Escolha a categoria"
-          value={formData.categoria}
-          onChange={(e) => handleChange('categoria', e.target.value)}
+        <Label>Categoria</Label>
+        <Controller
+          name="categoria"
+          control={control}
+          render={({ field }) => (
+            <Select value={field.value} onValueChange={field.onChange}>
+              <SelectTrigger>
+                <SelectValue placeholder="Escolha a categoria" />
+              </SelectTrigger>
+              <SelectContent>
+                {assuntos.map((assunto) => (
+                  <SelectItem key={assunto.slug} value={assunto.nome}>
+                    {assunto.nome}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-2">
           <Label htmlFor="valor">Preço sugerido</Label>
-          <Input
-            id="valor"
-            placeholder="00,00"
-            value={formData.valor}
-            onChange={(e) => handleChange('valor', e.target.value)}
-          />
+          <Input id="valor" placeholder="00,00" {...register('valor')} />
+          {errors.valor && <span className="body-12 text-red-500">{errors.valor.message}</span>}
         </div>
 
         <div className="flex flex-col gap-2">
           <Label htmlFor="paginas">Páginas</Label>
-          <Input
-            id="paginas"
-            type="number"
-            placeholder="123"
-            value={formData.paginas}
-            onChange={(e) => handleChange('paginas', e.target.value)}
-          />
+          <Input id="paginas" type="number" placeholder="123" {...register('paginas')} />
+          {errors.paginas && <span className="body-12 text-red-500">{errors.paginas.message}</span>}
         </div>
       </div>
 
@@ -106,20 +125,17 @@ export function BookForm({ initialData, mode, onSubmit, onBack }: BookFormProps)
         <Textarea
           id="descricao"
           placeholder="Escreva a descrição do livro"
-          value={formData.descricao}
-          onChange={(e) => handleChange('descricao', e.target.value)}
           rows={6}
+          {...register('descricao')}
         />
       </div>
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="imagemUrl">URL da imagem</Label>
-        <Input
-          id="imagemUrl"
-          placeholder="https://..."
-          value={formData.imagemUrl}
-          onChange={(e) => handleChange('imagemUrl', e.target.value)}
-        />
+        <Input id="imagemUrl" placeholder="https://..." {...register('imagemUrl')} />
+        {errors.imagemUrl && (
+          <span className="body-12 text-red-500">{errors.imagemUrl.message}</span>
+        )}
       </div>
 
       <div className="flex items-center justify-between">
