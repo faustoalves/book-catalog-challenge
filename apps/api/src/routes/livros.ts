@@ -56,13 +56,20 @@ export async function livrosRoutes(app: FastifyInstance) {
     const [livro] = await db.select().from(livros).where(eq(livros.slug, slug)).limit(1)
     if (!livro) return reply.status(404).send({ error: 'Livro not found' })
 
-    const categorias = await db
-      .select({ nome: assuntos.nome, slug: assuntos.slug })
-      .from(livroAssunto)
-      .innerJoin(assuntos, eq(assuntos.codAs, livroAssunto.assuntoCodAs))
-      .where(eq(livroAssunto.livroCodl, livro.codl))
+    const [categorias, autoresDoLivro] = await Promise.all([
+      db
+        .select({ nome: assuntos.nome, slug: assuntos.slug })
+        .from(livroAssunto)
+        .innerJoin(assuntos, eq(assuntos.codAs, livroAssunto.assuntoCodAs))
+        .where(eq(livroAssunto.livroCodl, livro.codl)),
+      db
+        .select({ nome: autores.nome })
+        .from(livroAutor)
+        .innerJoin(autores, eq(autores.codAu, livroAutor.autorCodAu))
+        .where(eq(livroAutor.livroCodl, livro.codl)),
+    ])
 
-    return reply.send({ ...livro, categorias })
+    return reply.send({ ...livro, categorias, autores: autoresDoLivro.map((a) => a.nome) })
   })
 
   app.post('/livros', async (request, reply) => {
