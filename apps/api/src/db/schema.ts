@@ -3,17 +3,19 @@ import { integer, numeric, pgTable, serial, text } from 'drizzle-orm/pg-core'
 export const livros = pgTable('livros', {
   codl: serial('codl').primaryKey(),
   titulo: text('titulo').notNull(),
+  slug: text('slug'),
   editora: text('editora'),
   edicao: integer('edicao'),
   anoPublicacao: integer('ano_publicacao'),
   valor: numeric('valor', { precision: 10, scale: 2 }).notNull(),
   imagemUrl: text('imagem_url'),
   paginas: integer('paginas'),
+  descricao: text('descricao'),
 })
 
 export const autores = pgTable('autores', {
   codAu: serial('cod_au').primaryKey(),
-  nome: text('nome').notNull(),
+  nome: text('nome').notNull().unique(),
 })
 
 export const assuntos = pgTable('assuntos', {

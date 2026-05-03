@@ -1,15 +1,6 @@
 import { db } from './index.js'
 import { assuntos } from './schema.js'
-
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9\s]/g, '')
-    .trim()
-    .replace(/\s+/g, '-')
-}
+import { slugify } from '../lib/slugify.js'
 
 const data = [
   {

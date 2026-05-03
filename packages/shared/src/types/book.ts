@@ -48,6 +48,7 @@ export interface BookSuggestion {
   mainCategory: string | null
   imagemUrl: string | null
   assuntos: string[]
+  valor: string | null
 }
 
 export interface GoogleBooksSearchResult {

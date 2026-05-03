@@ -1,0 +1,1 @@
+ALTER TABLE "livros" ADD COLUMN "slug" text;
