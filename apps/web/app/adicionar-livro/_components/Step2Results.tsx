@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import { useAddBook, type BookSuggestion } from '@/context/AddBookContext'
+import { fetcher } from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 
@@ -24,10 +25,9 @@ export function Step2Results() {
         const params = new URLSearchParams()
         if (searchTitulo) params.set('q', searchTitulo)
         if (searchAutor) params.set('autor', searchAutor)
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}api/google-books/search?${params}`,
+        const data = await fetcher<{ items: BookSuggestion[] }>(
+          `/api/google-books/search?${params}`,
         )
-        const data = await res.json()
         setSearchResults(data.items ?? [])
       } catch {
         setSearchResults([])

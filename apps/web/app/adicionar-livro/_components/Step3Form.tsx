@@ -4,15 +4,15 @@ import { useRouter } from 'next/navigation'
 import { useAddBook } from '@/context/AddBookContext'
 import { BookForm } from '@/components/ui/books/book-form/BookForm'
 import type { BookFormData } from '@/context/AddBookContext'
+import { fetcher } from '@/lib/api'
 
 export function Step3Form() {
   const { formData, setStep, reset } = useAddBook()
   const router = useRouter()
 
   async function handleSubmit(data: BookFormData) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/livros`, {
+    const livro = await fetcher<{ slug: string }>('/api/livros', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         titulo: data.titulo,
         autores: data.autor ? data.autor.split(',').map((a) => a.trim()) : [],
@@ -24,10 +24,6 @@ export function Step3Form() {
         assuntos: [],
       }),
     })
-
-    if (!res.ok) throw new Error('Erro ao adicionar livro')
-
-    const livro = await res.json()
     reset()
     router.push(`/livro/${livro.slug}`)
   }
