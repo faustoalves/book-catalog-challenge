@@ -1,4 +1,5 @@
 import cors from '@fastify/cors'
+import fp from 'fastify-plugin'
 import type { FastifyInstance } from 'fastify'
 
 const ALLOWED_ORIGINS = [
@@ -7,14 +8,8 @@ const ALLOWED_ORIGINS = [
   'https://www.book-catalog.faustoalves.com.br',
 ]
 
-export async function corsPlugin(app: FastifyInstance) {
+export const corsPlugin = fp(async (app: FastifyInstance) => {
   await app.register(cors, {
-    origin: (origin, cb) => {
-      if (!origin || ALLOWED_ORIGINS.includes(origin)) {
-        cb(null, true)
-      } else {
-        cb(new Error('Not allowed by CORS'), false)
-      }
-    },
+    origin: ALLOWED_ORIGINS,
   })
-}
+})
