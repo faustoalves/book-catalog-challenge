@@ -2,6 +2,7 @@ import BookCover from '@/components/ui/books/book-cover/BookCover'
 import BooksSlider from '@/components/ui/books/books-slider/BooksSlider'
 import { Button } from '@/components/ui/button'
 import HeaderContainer from '@/components/ui/containers/header-container/HeaderContainer'
+import Footer from '@/components/ui/footer/Footer'
 import NavBar from '@/components/ui/navbar/Navbar'
 import TitleDescription from '@/components/ui/titles/TitleDescription'
 import { BookmarkIcon, SettingsIcon, Share2 } from 'lucide-react'
@@ -26,7 +27,7 @@ export default async function BookPage({ params }: BookPageProps) {
     <main>
       <NavBar />
       <HeaderContainer>
-        <div className="relative mx-auto flex flex-col gap-12 lg:flex-row">
+        <div className="relative mx-auto flex flex-col gap-12 pb-8 lg:flex-row lg:pb-0">
           <div className="top-[172px] flex w-full flex-col gap-20 self-start lg:sticky lg:w-auto lg:basis-3/7">
             <div className="flex w-full flex-col items-center justify-center gap-2">
               <BookCover
@@ -39,8 +40,8 @@ export default async function BookPage({ params }: BookPageProps) {
               />
             </div>
           </div>
-          <div className="flex basis-4/7 flex-col gap-2">
-            <div className="flex h-auto w-full flex-col items-center justify-center gap-2 lg:h-[500px]">
+          <div className="flex basis-4/7 flex-col gap-8">
+            <div className="flex h-auto w-full flex-col items-center justify-center gap-2">
               <div className="flex w-full flex-row gap-2">
                 <Link href={`/editar-livro/${data.slug}`}>
                   <Button variant="solid" color="cream" icon={SettingsIcon}>
@@ -54,10 +55,41 @@ export default async function BookPage({ params }: BookPageProps) {
                 type="large"
                 title={data.titulo}
                 description={data.autores.join(', ')}
-                className="w-full flex-1 items-start justify-center"
+                className="w-full flex-1 items-start justify-center lg:pt-12 lg:pb-8"
               />
             </div>
-            <p className="body-16 h-96 text-gray-700">test</p>
+            <div className="flex flex-col gap-2">
+              <p className="title-24 text-brown-500">Descrição</p>
+              <p
+                className="body-16 text-gray-700"
+                dangerouslySetInnerHTML={{ __html: data.descricao ?? 'Não informado' }}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <p className="title-24 text-brown-500">Editora</p>
+              <p
+                className="body-16 text-gray-700"
+                dangerouslySetInnerHTML={{ __html: data.editora ?? 'Não informado' }}
+              />
+            </div>
+            <div className="flex flex-col gap-8 lg:flex-row">
+              <div className="flex flex-1 flex-col gap-2">
+                <p className="title-24 text-brown-500">Preço sugerido</p>
+                <p
+                  className="body-16 text-gray-700"
+                  dangerouslySetInnerHTML={{
+                    __html: data.valor != null ? `R$ ${data.valor}` : 'Não informado',
+                  }}
+                />
+              </div>
+              <div className="flex flex-1 flex-col gap-2">
+                <p className="title-24 text-brown-500">Páginas</p>
+                <p
+                  className="body-16 text-gray-700"
+                  dangerouslySetInnerHTML={{ __html: data.paginas ?? 'Não informado' }}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </HeaderContainer>
@@ -68,7 +100,7 @@ export default async function BookPage({ params }: BookPageProps) {
         livros={data.categoriaRelacionada.livros}
         count={data.categoriaRelacionada.count}
       />
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <Footer />
     </main>
   )
 }
