@@ -4,6 +4,16 @@ Monorepo com dois aplicativos: `web` (Next.js) e `api` (Fastify), ambos deployad
 
 🎨 **[Design no Figma](https://www.figma.com/design/hEey4bahbzpvDKrLKtLoru/Untitled?node-id=14-9741&t=OA9v7Vb51XKSxTG1-1)**
 
+## Funcionalidades pendentes
+
+As funcionalidades abaixo estão previstas no design mas ainda não foram implementadas:
+
+| Funcionalidade         | Descrição                                                                                                                                                                     |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Busca**              | Campo de busca na navbar envia query para `GET /api/livros?q=...` e exibe os resultados em uma página ou dropdown                                                             |
+| **Favoritar livro**    | Botão de bookmark na página do livro — requer modelo de favoritos no banco e autenticação ou identificação do usuário                                                         |
+| **Compartilhar livro** | Botão de share na página do livro — pode usar a [Web Share API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Share_API) ou copiar o link para a área de transferência |
+
 ## Stack
 
 | Camada         | Tecnologia                   | Versão |
