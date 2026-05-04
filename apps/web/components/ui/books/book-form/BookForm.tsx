@@ -93,10 +93,10 @@ export function BookForm({ initialData, mode, onSubmit, onBack, onDelete }: Book
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
         <div className="flex flex-col gap-6 pb-8 lg:flex-row">
-          <div className="basis-1/1 flex flex-row items-center justify-center gap-6 lg:basis-2/5">
+          <div className="flex basis-1/1 flex-row items-center justify-center gap-6 lg:basis-2/5">
             <BookCover imageUrl={initialData.imagemUrl} alt={initialData.titulo} size="large" />
           </div>
-          <div className="basis-1/1 flex flex-col gap-6 lg:basis-3/5">
+          <div className="flex basis-1/1 flex-col gap-6 lg:basis-3/5">
             <div className="flex flex-col gap-2">
               <Label htmlFor="titulo">Nome do livro</Label>
               <Input id="titulo" placeholder="Informe o nome do livro" {...register('titulo')} />
@@ -170,7 +170,7 @@ export function BookForm({ initialData, mode, onSubmit, onBack, onDelete }: Book
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col-reverse items-center justify-between gap-4 lg:flex-row">
           {onBack && (
             <Button
               type="button"
@@ -178,11 +178,12 @@ export function BookForm({ initialData, mode, onSubmit, onBack, onDelete }: Book
               color="cream"
               icon={ChevronLeftIcon}
               onClick={onBack}
+              className="w-full lg:w-auto"
             >
               Voltar
             </Button>
           )}
-          <div className="flex flex-row gap-4">
+          <div className="flex w-full flex-col-reverse gap-4 lg:w-auto lg:flex-row">
             {mode === 'edit' && onDelete && (
               <Button
                 type="button"
@@ -193,6 +194,7 @@ export function BookForm({ initialData, mode, onSubmit, onBack, onDelete }: Book
                   setDeleteInput('')
                   setDeleteOpen(true)
                 }}
+                className="w-full lg:w-auto"
               >
                 Excluir
               </Button>
@@ -203,7 +205,7 @@ export function BookForm({ initialData, mode, onSubmit, onBack, onDelete }: Book
               color="cream"
               icon={mode === 'add' ? PlusIcon : PencilIcon}
               disabled={isSubmitting}
-              className="ml-auto"
+              className="ml-auto w-full lg:w-auto"
             >
               {mode === 'add' ? 'Confirmar e adicionar' : 'Salvar alterações'}
             </Button>
