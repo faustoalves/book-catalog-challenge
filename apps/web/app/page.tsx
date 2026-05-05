@@ -21,7 +21,7 @@ export default async function HomePage() {
     <main className="h-full w-full">
       <NavBar />
       <HeaderContainer className="px-0">
-        <div className="lg:px-auto mx-auto flex w-full flex-col items-center justify-center px-0 md:flex-row">
+        <div className="lg:px-auto mx-auto flex w-full flex-col items-center justify-center gap-6 px-0 md:flex-row">
           <TitleDescription
             type="large"
             title="Organize sua leitura, expanda seu mundo"
@@ -29,17 +29,17 @@ export default async function HomePage() {
             className="basis-1/1 lg:px-auto px-4 lg:basis-1/2"
           />
           <Image
-            src="/Hero_mobile.png"
+            src="/img_hero_mobile.png"
             alt="Home Hero"
-            width={500}
-            height={500}
+            width={390}
+            height={365}
             className="ml-auto block md:hidden"
           />
           <Image
-            src="/Hero_Desktop.png"
+            src="/img_hero_desktop.png"
             alt="Home Hero"
-            width={500}
-            height={500}
+            width={600}
+            height={595}
             className="hidden md:block"
           />
         </div>

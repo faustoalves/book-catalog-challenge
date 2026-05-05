@@ -39,9 +39,9 @@ export default function AddBookPage() {
   return (
     <main className="">
       <NavBar />
-      <HeaderContainer>
-        <div className="mx-auto w-full pb-24 lg:min-h-[600px]">
-          <div className="mb-16 flex items-start justify-between">
+      <HeaderContainer className="min-h-[calc(100vh-188px)] lg:min-h-[calc(100vh-185px)]">
+        <div className="mx-auto w-full pb-24">
+          <div className="mb-16 flex flex-col-reverse items-start justify-between gap-4 lg:flex-row">
             <TitleDescription type="medium" title={title} description={description} />
             <StepIndicator current={step} />
           </div>

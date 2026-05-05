@@ -34,7 +34,7 @@ const BooksSlider: React.FC<BookSlider> = ({ nome, descricao, livros, count, slu
       <div className="flex items-center justify-center px-4">
         <Link href={`/categoria/${slug}`} className="flex w-full items-center justify-center">
           <Button variant="outline" color="green" className="ml-auto w-full lg:w-auto">
-            Ver todos - {count}
+            Ver todos ({count})
           </Button>
         </Link>
       </div>

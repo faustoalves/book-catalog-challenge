@@ -28,7 +28,7 @@ export default async function BookPage({ params }: BookPageProps) {
       <NavBar />
       <HeaderContainer>
         <div className="relative mx-auto flex flex-col gap-12 pb-8 lg:flex-row lg:pb-0">
-          <div className="top-[172px] flex w-full flex-col gap-20 self-start lg:sticky lg:w-auto lg:basis-3/7">
+          <div className="lg:basis-3/7 top-[172px] flex w-full flex-col gap-20 self-start lg:sticky lg:w-auto">
             <div className="flex w-full flex-col items-center justify-center gap-2">
               <BookCover
                 imageUrl={
@@ -40,11 +40,11 @@ export default async function BookPage({ params }: BookPageProps) {
               />
             </div>
           </div>
-          <div className="flex basis-4/7 flex-col gap-8">
+          <div className="basis-4/7 flex flex-col gap-8">
             <div className="flex h-auto w-full flex-col items-center justify-center gap-2">
               <div className="flex w-full flex-row gap-2">
                 <Link href={`/editar-livro/${data.slug}`}>
-                  <Button variant="solid" color="cream" icon={SettingsIcon}>
+                  <Button variant="solid" color="brown" icon={SettingsIcon}>
                     Editar Livro
                   </Button>
                 </Link>
@@ -55,7 +55,7 @@ export default async function BookPage({ params }: BookPageProps) {
                 type="large"
                 title={data.titulo}
                 description={data.autores.join(', ')}
-                className="w-full flex-1 items-start justify-center lg:pt-12 lg:pb-8"
+                className="w-full flex-1 items-start justify-center lg:pb-8 lg:pt-12"
               />
             </div>
             <div className="flex flex-col gap-2">

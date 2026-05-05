@@ -7,20 +7,20 @@
   --font-body: var(--font-sans), system-ui, sans-serif;
 
   /* Cream */
-  --color-cream-100: #edece3;
-  --color-cream-200: #e3e1d3;
-  --color-cream-300: #cfcbb4;
-  --color-cream-400: #bab595;
-  --color-cream-500: #a69f76;
-  --color-cream-600: #8c865c;
-  --color-cream-700: #6d6848;
-  --color-cream-800: #4d4a33;
-  --color-cream-900: #2e2c1f;
+  --color-cream-100: #fbf9f6;
+  --color-cream-200: #efe6d9;
+  --color-cream-300: #e3d2bb;
+  --color-cream-400: #d3bea7;
+  --color-cream-500: #b2a492;
+  --color-cream-600: #998d7d;
+  --color-cream-700: #5e5643;
+  --color-cream-800: #3d3830;
+  --color-cream-900: #1c1a17;
 
   /* Green */
-  --color-green-300: #6fbeb2;
-  --color-green-500: #409084;
-  --color-green-700: #224f48;
+  --color-green-300: #95a859;
+  --color-green-500: #606c37;
+  --color-green-700: #444d29;
 
   /* Gray */
   --color-gray-300: #b1b0af;
@@ -28,12 +28,12 @@
   --color-gray-700: #3c3c3b;
 
   /* Brown */
-  --color-brown-300: #af7760;
-  --color-brown-500: #7e4c3a;
-  --color-brown-700: #59372a;
+  --color-brown-300: #ca7a68;
+  --color-brown-500: #a14936;
+  --color-brown-700: #582a1f;
 
   /* Base */
-  --color-white: #f7f6f3;
+  --color-white: #fcfcfc;
   --color-black: #0d0d0d;
 }
 

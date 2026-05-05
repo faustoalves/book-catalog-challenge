@@ -45,11 +45,7 @@ export function Step2Results() {
 
   if (searchResults.length === 0) {
     return (
-      <div className="flex flex-col gap-6">
-        <p className="body-16">
-          Não encontramos livros com esse título ou autor. Tente verificar a ortografia ou buscar
-          com termos diferentes.
-        </p>
+      <div className="flex flex-col gap-6 py-12">
         <Button variant="outline" color="cream" icon={ChevronLeftIcon} onClick={() => setStep(1)}>
           Refazer pesquisa
         </Button>
@@ -70,7 +66,7 @@ export function Step2Results() {
         color="cream"
         icon={ChevronLeftIcon}
         onClick={() => setStep(1)}
-        className="self-start"
+        className="w-full lg:mx-auto lg:w-fit"
       >
         Refazer pesquisa
       </Button>
@@ -86,8 +82,8 @@ function BookResultCard({
   onSelect: (book: BookSuggestion) => void
 }) {
   return (
-    <div className="flex basis-1/2 flex-col items-center justify-center pb-8 lg:basis-1/4">
-      <div className="group flex h-[440px] min-h-[440px] w-full flex-col items-center justify-center gap-4 lg:h-[360px] lg:min-h-[360px]">
+    <div className="flex basis-1/2 flex-col items-center justify-center pb-12 lg:basis-1/4">
+      <div className="group flex h-[340px] min-h-[340px] w-full flex-col items-center justify-center gap-4 lg:h-[360px] lg:min-h-[360px]">
         <div className="flex w-full flex-1 flex-col items-center justify-center">
           <BookCover
             imageUrl={
@@ -98,8 +94,8 @@ function BookResultCard({
             size="small"
           />
         </div>
-        <div className="flex h-[110px] w-full flex-col items-center justify-center gap-2">
-          <p className="title-20 font-playfair line-clamp-1 text-balance px-2 text-center font-semibold text-green-700 group-hover:underline">
+        <div className="flex h-[150px] w-full flex-col items-center justify-center gap-2">
+          <p className="title-20 font-playfair line-clamp-3 text-balance px-2 text-center font-semibold text-green-700 group-hover:underline lg:line-clamp-1">
             {book.titulo}
           </p>
           <p className="body-16 line-clamp-1 text-center text-gray-700">
@@ -110,7 +106,7 @@ function BookResultCard({
             color="green"
             icon={ChevronRightIcon}
             onClick={() => onSelect(book)}
-            className="w-full lg:w-auto"
+            className="w-auto"
           >
             Selecionar
           </Button>

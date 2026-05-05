@@ -93,10 +93,18 @@ export function BookForm({ initialData, mode, onSubmit, onBack, onDelete }: Book
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
         <div className="flex flex-col gap-6 pb-8 lg:flex-row">
-          <div className="flex basis-1/1 flex-row items-center justify-center gap-6 lg:basis-2/5">
-            <BookCover imageUrl={initialData.imagemUrl} alt={initialData.titulo} size="large" />
+          <div className="basis-1/1 flex flex-row items-center justify-center gap-6 lg:basis-2/5">
+            <BookCover
+              imageUrl={
+                initialData.imagemUrl
+                  ? initialData.imagemUrl
+                  : 'https://books.google.com/books/content?id=lxlGzwEACAAJ&printsec=frontcover&img=1&zoom=3&source=gbs_api'
+              }
+              alt={initialData.titulo}
+              size="large"
+            />
           </div>
-          <div className="flex basis-1/1 flex-col gap-6 lg:basis-3/5">
+          <div className="basis-1/1 flex flex-col gap-6 lg:basis-3/5">
             <div className="flex flex-col gap-2">
               <Label htmlFor="titulo">Nome do livro</Label>
               <Input id="titulo" placeholder="Informe o nome do livro" {...register('titulo')} />
@@ -214,20 +222,24 @@ export function BookForm({ initialData, mode, onSubmit, onBack, onDelete }: Book
       </form>
 
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <DialogContent showCloseButton={false} className="bg-cream-100 border-cream-700 border">
+        <DialogContent showCloseButton={true} className="bg-cream-100 border-cream-500 border">
           <DialogHeader>
-            <DialogTitle className="title-24! font-playfair text-cream-900">
+            <DialogTitle className="title-20! font-playfair text-brown-500">
               Excluir livro
             </DialogTitle>
-            <DialogDescription className="body-16 text-cream-900">
-              Tem certeza que deseja excluir <strong>{initialData.titulo}</strong>? Esta ação é
-              permanente e não pode ser desfeita. Todos os dados do livro serão removidos.
+            <DialogDescription className="body-16! text-cream-800">
+              <p>
+                Tem certeza que deseja excluir <strong>{initialData.titulo}</strong>? Esta ação é
+                permanente e não pode ser desfeita. Todos os dados do livro serão removidos.
+              </p>
             </DialogDescription>
           </DialogHeader>
 
           <div className="flex flex-col gap-2">
-            <Label htmlFor="delete-confirm" className="body-14 text-cream-900">
-              Para confirmar, digite <strong>{DELETE_CONFIRMATION}</strong> abaixo:
+            <Label htmlFor="delete-confirm" className="body-14 text-cream-800">
+              <p>
+                Para confirmar, digite <strong>{DELETE_CONFIRMATION}</strong> abaixo:
+              </p>
             </Label>
             <Input
               id="delete-confirm"

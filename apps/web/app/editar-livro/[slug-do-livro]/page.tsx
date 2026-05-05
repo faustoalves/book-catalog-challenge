@@ -76,7 +76,7 @@ export default function EditBookPage() {
   return (
     <main className="min-h-screen">
       <NavBar />
-      <HeaderContainer>
+      <HeaderContainer className="min-h-[calc(100vh-188px)] pb-12 lg:min-h-[calc(100vh-185px)] lg:pb-24">
         <div className="mx-auto w-full lg:min-h-[600px]">
           <div className="mb-16 flex items-start justify-between">
             <TitleDescription

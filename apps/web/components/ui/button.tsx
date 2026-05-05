@@ -44,25 +44,25 @@ const buttonVariants = cva(
         variant: 'outline',
         color: 'cream',
         className:
-          'border-cream-900 text-cream-900 hover:border-cream-800 hover:text-cream-800 focus-visible:ring-cream-900',
+          'border-cream-900 bg-cream-900/5 text-cream-900 hover:border-cream-800 hover:text-cream-800 focus-visible:ring-cream-900',
       },
       {
         variant: 'outline',
         color: 'green',
         className:
-          'border-green-700 text-green-700 hover:border-green-500 hover:text-green-500 focus-visible:ring-green-700',
+          'border-green-700 bg-green-700/5 text-green-700 hover:border-green-500 hover:text-green-500 focus-visible:ring-green-700',
       },
       {
         variant: 'outline',
         color: 'gray',
         className:
-          'border-gray-700  text-gray-700  hover:border-gray-500  hover:text-gray-500  focus-visible:ring-gray-700',
+          'border-gray-700 bg-gray-700/5 text-gray-700  hover:border-gray-500  hover:text-gray-500  focus-visible:ring-gray-700',
       },
       {
         variant: 'outline',
         color: 'brown',
         className:
-          'border-brown-700 text-brown-700 hover:border-brown-500 hover:text-brown-500 focus-visible:ring-brown-700',
+          'border-brown-700 bg-brown-700/5 text-brown-700 hover:border-brown-500 hover:text-brown-500 focus-visible:ring-brown-700',
       },
     ],
     defaultVariants: {
